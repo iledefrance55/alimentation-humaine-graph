@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Répartition mondiale des céréales</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        .chart-container {
+            position: relative;
+            height: 500px;
+            margin: 30px 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .conclusion {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+        .source {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌾 Que deviennent nos céréales ?</h1>
+        <p class="subtitle">De la production mondiale à votre assiette : une tragédie en chiffres</p>
+        
+        <div class="chart-container">
+            <canvas id="cerealChart"></canvas>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">37%</div>
+                <div class="stat-label">Nourrissent le bétail industriel</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">22%</div>
+                <div class="stat-label">Biocarburants & industrie</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">16%</div>
+                <div class="stat-label">Perdues ou gaspillées</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">25%</div>
+                <div class="stat-label">Réellement consommées</div>
+            </div>
+        </div>
+        
+        <div class="conclusion">
+            <strong>Résultat catastrophique :</strong> Seulement 25% de nos céréales nourrissent réellement les humains ! Nous pourrions nourrir 10 milliards d'humains mais n'en nourrissons que 2,5 milliards avec notre production céréalière réelle, pendant que 828 millions de personnes ont faim.
+        </div>
+        
+        <p class="source">
+            Sources : OCDE-FAO Perspectives agricoles 2023-2032, FAO Food Loss and Waste, études nationales sur le gaspillage alimentaire
+        </p>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('cerealChart').getContext('2d');
+        
+        const chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    'Alimentation animale (37%)',
+                    'Biocarburants & industrie (22%)',
+                    'Pertes post-récolte (5%)',
+                    'Gaspillage supermarchés (7%)',
+                    'Gaspillage domestique (4%)',
+                    'Effectivement consommées (25%)'
+                ],
+                datasets: [{
+                    data: [37, 22, 5, 7, 4, 25],
+                    backgroundColor: [
+                        '#e74c3c',  // Rouge - alimentation animale
+                        '#f39c12',  // Orange - biocarburants
+                        '#9b59b6',  // Pourpre - pertes post-récolte
+                        '#3498db',  // Bleu - gaspillage supermarchés
+                        '#2c3e50',  // Noir/gris très foncé - gaspillage domestique
+                        '#27ae60'   // Vert - effectivement consommées
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 3,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 14,
+                                weight: '500'
+                            },
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleFont: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 14
+                        },
+                        cornerRadius: 10,
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ' : ' + context.parsed + '%';
+                            },
+                            afterLabel: function(context) {
+                                const descriptions = {
+                                    0: 'Pour nourrir les animaux d\'élevage industriel',
+                                    1: 'Transformées en carburant et produits industriels',
+                                    2: 'Perdues entre la récolte et les magasins',
+                                    3: 'Jetées dans les supermarchés comme invendus',
+                                    4: 'Gaspillées dans les foyers (pain, restes, dates)',
+                                    5: 'Effectivement consommées par les humains'
+                                };
+                                return descriptions[context.dataIndex];
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    animateRotate: true,
+                    duration: 2000
+                },
+                elements: {
+                    arc: {
+                        borderWidth: 2
+                    }
+                }
+            }
+        });
+        
+        // Animation au chargement
+        setTimeout(() => {
+            chart.update();
+        }, 500);
+    </script>
+</body>
+</html>
